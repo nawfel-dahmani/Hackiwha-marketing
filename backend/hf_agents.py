@@ -3,7 +3,7 @@ import json
 import os
 
 
-DEFAULT_MODEL = os.getenv("HF_MODEL", "Qwen/Qwen3-32B")
+DEFAULT_MODEL = os.getenv("HF_MODEL", "Qwen/Qwen2.5-72B-Instruct")
 DEFAULT_PROVIDER = os.getenv("HF_PROVIDER", "auto")
 
 
@@ -165,6 +165,7 @@ def call_json_agent(system_prompt, payload, schema, schema_name, model=DEFAULT_M
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ],
         temperature=0.2,
+        max_tokens=800,
     )
 
     return extract_json_object(response.choices[0].message.content)
@@ -191,6 +192,7 @@ def call_structured_agent(system_prompt, payload, schema, schema_name, model=DEF
             ],
             response_format=response_format,
             temperature=0.2,
+            max_tokens=800,
         )
 
         return json.loads(response.choices[0].message.content)
@@ -206,6 +208,43 @@ def call_structured_agent(system_prompt, payload, schema, schema_name, model=DEF
             raise
 
         return call_json_agent(system_prompt, payload, schema, schema_name, model=model)
+
+
+def call_deepseek_agent(system_prompt, payload, schema, schema_name):
+    import requests
+    api_key = os.getenv("DEEPSEEK_API_KEY")
+    if not api_key:
+        raise RuntimeError("DEEPSEEK_API_KEY is missing.")
+
+    url = "https://api.deepseek.com/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    # DeepSeek JSON Mode requires the word "json" in the prompt
+    full_prompt = (
+        f"{system_prompt}\n\n"
+        f"Return ONLY valid JSON matching this schema: {json.dumps(schema, ensure_ascii=False)}.\n"
+        "Do not include markdown code blocks, comments, or extra explanation. Return raw JSON text."
+    )
+
+    data = {
+        "model": "deepseek-chat",
+        "messages": [
+            {"role": "system", "content": full_prompt},
+            {"role": "user", "content": json.dumps(payload, ensure_ascii=False)}
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.2,
+        "max_tokens": 1000
+    }
+
+    response = requests.post(url, headers=headers, json=data, timeout=30)
+    response.raise_for_status()
+
+    content = response.json()["choices"][0]["message"]["content"]
+    return extract_json_object(content)
 
 
 def generate_ai_recommendation(founder_inputs, library, algorithm_output):
@@ -224,6 +263,14 @@ def generate_ai_recommendation(founder_inputs, library, algorithm_output):
         "library": library,
         "algorithm_output": algorithm_output,
     }
+
+    if os.getenv("DEEPSEEK_API_KEY"):
+        return call_deepseek_agent(
+            system_prompt,
+            payload,
+            AI_RECOMMENDATION_SCHEMA,
+            "AIRecommendation"
+        )
 
     return call_structured_agent(
         system_prompt,
@@ -248,6 +295,14 @@ def generate_roadmap_report(founder_inputs, algorithm_output, ai_output):
         "algorithm_output": algorithm_output,
         "ai_output": ai_output,
     }
+
+    if os.getenv("DEEPSEEK_API_KEY"):
+        return call_deepseek_agent(
+            system_prompt,
+            payload,
+            ROADMAP_REPORT_SCHEMA,
+            "RoadmapReport"
+        )
 
     return call_structured_agent(
         system_prompt,

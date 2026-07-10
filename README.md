@@ -1,6 +1,10 @@
 # LearnFirst
 
-LearnFirst is an AI-assisted decision support system for early-stage startups. It ranks marketing validation experiments with a deterministic decision engine, then uses an AI review layer to explain the result, highlight risks, and produce a founder-friendly roadmap.
+LearnFirst is a hackathon-ready AI-assisted decision support system for early-stage startups. It ranks marketing validation experiments with a deterministic decision engine, then uses an AI review layer to explain the result, highlight risks, and produce a founder-friendly roadmap.
+
+## One-Line Pitch
+
+Rank marketing experiments first, explain them second, and give founders a reproducible action plan instead of random AI suggestions.
 
 ## What It Does
 
@@ -8,6 +12,13 @@ LearnFirst is an AI-assisted decision support system for early-stage startups. I
 - Runs a deterministic ranking engine first, using a weighted decision model.
 - Uses an AI second-opinion layer to explain the ranking and enrich the report.
 - Generates a roadmap and saves markdown/PDF reports from the backend.
+
+## Why It Stands Out
+
+- Decision-making is deterministic, so the same startup profile always gives the same ranking.
+- The AI is a reviewer, not the decision-maker, which makes the product easier to trust.
+- The UX is built for demo day, with a clear startup profile flow and judge-friendly output.
+- The output is practical: ranked experiments, risks, roadmap, and a first move the team can execute immediately.
 
 ## Project Structure
 

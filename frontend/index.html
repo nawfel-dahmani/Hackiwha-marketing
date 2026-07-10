@@ -1,41 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LearnFirst ranks startup marketing experiments with a deterministic engine and AI explanation layer. Built for hackathons, founder tools, and fast marketing validation.">
+    <meta name="theme-color" content="#06090f">
     <link rel="stylesheet" href="style.css">
-    <title>LearnFirst</title>
+    <title>LearnFirst | Smart Marketing Experiment Ranking</title>
 </head>
 <body>
 
+<!-- SVG gradient definition for score ring -->
+<svg width="0" height="0" style="position:absolute">
+    <defs>
+        <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8b5cf6"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+        </linearGradient>
+    </defs>
+</svg>
+
+<!-- ============================================================
+     WELCOME SCREEN
+     ============================================================ -->
 <section id="welcome-screen">
 
     <div class="ambient ambient-left"></div>
     <div class="ambient ambient-right"></div>
 
-    <div class="container">
+    <div class="container hero-shell">
 
-        <div class="eyebrow">Deterministic marketing validation</div>
+        <div class="hero-copy">
+            <div class="eyebrow">⚡ Built for startup validation</div>
 
-        <h1>LearnFirst</h1>
+            <h1>LearnFirst</h1>
 
-        <p>
-            Turn a startup profile into a ranked experiment plan, an AI strategic review,
-            and a founder-ready roadmap.
-        </p>
+            <p class="hero-lead">
+                A judge-ready decision system that ranks marketing experiments first, then uses AI to explain the strategy in plain founder language.
+            </p>
 
-        <div class="hero-pills">
-            <span>SAW ranking</span>
-            <span>AI review layer</span>
-            <span>Founder roadmap</span>
+            <div class="hero-pills">
+                <span>Deterministic ranking</span>
+                <span>Explainable AI review</span>
+                <span>Execution roadmap</span>
+            </div>
+
+            <div class="hero-actions">
+                <button id="start-btn">
+                    Start Demo →
+                </button>
+                <div class="hero-note">
+                    13 quick questions · 2 min · personalized report
+                </div>
+            </div>
+
+            <div class="toggle-container">
+                <label class="switch">
+                    <input type="checkbox" id="ai-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Include AI Strategic Review (takes ~15s)</span>
+            </div>
         </div>
 
-        <button id="start-btn">
-            Start Assessment
-        </button>
+        <div class="hero-panel">
+            <div class="panel-card panel-card-highlight">
+                <span class="panel-kicker">1</span>
+                <h3>Deterministic engine first</h3>
+                <p>SAW-based ranking compares experiments using explicit criteria, so every recommendation is reproducible.</p>
+            </div>
+
+            <div class="panel-card">
+                <span class="panel-kicker">2</span>
+                <h3>AI second opinion</h3>
+                <p>The AI explains the ranked result, surfaces risks, and adds qualitative context without changing the decision.</p>
+            </div>
+
+            <div class="panel-card">
+                <span class="panel-kicker">3</span>
+                <h3>Founder-ready output</h3>
+                <p>A ranked shortlist, roadmap, and report the team can act on immediately.</p>
+            </div>
+        </div>
 
     </div>
 
 </section>
 
+<!-- ============================================================
+     QUESTION SCREEN
+     ============================================================ -->
 <section id="question-screen">
 
     <div class="question-card">
@@ -44,62 +98,64 @@
             <div>
                 <div class="eyebrow">Startup profile</div>
                 <h2 id="question-title">
-                    What industry is your startup in?
+                    What's your startup called?
                 </h2>
+                <p class="question-subtitle" id="question-subtitle"></p>
             </div>
 
-            <div class="step-counter" id="step-counter">1 / 12</div>
+            <div class="step-counter" id="step-counter">1 / 13</div>
         </div>
 
         <div id="progress">
-
-    <div id="progress-fill"></div>
-
-</div>
-
-        <div id="options-container">
-
-            <button class="option">SaaS</button>
-            <button class="option">E-commerce</button>
-            <button class="option">Education</button>
-            <button class="option">Healthcare</button>
-
+            <div id="progress-fill"></div>
         </div>
 
-        <button id="next-btn">
-            Next
-        </button>
+        <!-- Dynamic: either options grid or text input -->
+        <div id="options-container"></div>
+        <div id="text-input-container" class="text-input-container" style="display:none">
+            <input type="text" class="text-input" id="text-input" placeholder="" autocomplete="off">
+            <p class="text-input-hint" id="text-input-hint"></p>
+        </div>
+
+        <div class="btn-row">
+            <button id="back-btn" style="display:none">← Back</button>
+            <button id="next-btn">Next →</button>
+        </div>
 
     </div>
 
 </section>
 
+<!-- ============================================================
+     LOADING SCREEN
+     ============================================================ -->
 <section id="loading-screen">
 
     <div class="loading-card">
+        <div class="spinner"></div>
+        <h2>Analyzing your startup…</h2>
+        <p>Ranking experiments and preparing the founder report.</p>
+        <p id="loading-stage"></p>
+    </div>
 
-<div class="spinner"></div>
-
-<h2>Analyzing your startup...</h2>
-
-<p>Ranking experiments and preparing the founder report...</p>
-
-</div>
 </section>
 
+<!-- ============================================================
+     RESULT SCREEN
+     ============================================================ -->
 <section id="result-screen">
 
     <div class="container result-container">
 
-        <h1>Your LearnFirst Report</h1>
-
-        <p class="result-intro">
-            The deterministic engine ranks the experiments first, then the AI explains the outcome and turns it into an execution plan.
-        </p>
-
-        <div id="results">
-
+        <div class="result-header">
+            <div class="eyebrow">📊 Judge-ready output</div>
+            <h1>Your LearnFirst Report</h1>
+            <p class="result-intro">
+                The deterministic engine ranked the experiments, then AI explained the outcome and built an execution plan.
+            </p>
         </div>
+
+        <div id="results"></div>
 
     </div>
 
@@ -107,6 +163,5 @@
 
 <script src="scripts.js"></script>
 
-
-
 </body>
+</html>

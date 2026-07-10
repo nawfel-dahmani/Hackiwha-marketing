@@ -41,9 +41,28 @@ def run_launchpilot_analysis(
 
     if use_hugging_face:
         try:
+            # Prune library to minimize prompt token count and reduce API latency
+            pruned_library = {
+                "branding_strategies": [
+                    {
+                        "id": item.get("id"),
+                        "name": item.get("name"),
+                        "description": item.get("description"),
+                        "type": item.get("type", "branding")
+                    } for item in library.get("branding_strategies", [])
+                ],
+                "marketing_experiments": [
+                    {
+                        "id": item.get("id"),
+                        "name": item.get("name"),
+                        "description": item.get("description"),
+                        "type": item.get("type", "marketing")
+                    } for item in library.get("marketing_experiments", [])
+                ]
+            }
             ai_output = generate_ai_recommendation(
                 founder_inputs,
-                library,
+                pruned_library,
                 algorithm_output,
             )
             roadmap_report = generate_roadmap_report(

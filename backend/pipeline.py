@@ -9,7 +9,7 @@ from hf_agents import (
     generate_ai_recommendation,
     generate_roadmap_report,
 )
-from report_generator import save_markdown_report
+from report_generator import save_markdown_report, save_pdf_report
 
 
 def load_library_data(library_path=DEFAULT_LIBRARY_PATH):
@@ -78,9 +78,14 @@ def run_launchpilot_analysis(
     }
 
     if save_report:
-        filename = f"launchpilot_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
-        output_path = os.path.join(os.path.dirname(__file__), "reports", filename)
-        analysis["report_path"] = save_markdown_report(analysis, output_path)
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        reports_dir = os.path.join(os.path.dirname(__file__), "reports")
+
+        md_path = os.path.join(reports_dir, f"launchpilot_report_{timestamp}.md")
+        analysis["report_path"] = save_markdown_report(analysis, md_path)
+
+        pdf_path = os.path.join(reports_dir, f"launchpilot_report_{timestamp}.pdf")
+        analysis["pdf_report_path"] = save_pdf_report(analysis, pdf_path)
 
     return analysis
 

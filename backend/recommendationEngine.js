@@ -474,7 +474,7 @@ function demo() {
     brandingScore: 35, // below 50 → branding adjustment kicks in
   };
 
-  console.log("\n📋 User Profile:");
+  console.log("\nUser Profile:");
   console.log(`   Budget:     $${profile.budget}`);
   console.log(`   Time:       ${profile.time} days`);
   console.log(`   Team size:  ${profile.teamSize}`);
@@ -521,7 +521,7 @@ function demo() {
     const libResults = recommend(validationProfile, libraryExperiments);
     printResults(libResults);
   } catch {
-    console.log("\n⚠️  library.json not found — skipping library demo.");
+    console.log("\nlibrary.json not found — skipping library demo.");
   }
 }
 

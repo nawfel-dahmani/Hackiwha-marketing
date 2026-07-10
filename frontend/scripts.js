@@ -147,7 +147,6 @@ const questions = [
         subtitle: "Do you know exactly who you're building for, or is it still fuzzy?",
         type: "scale",
         scaleLabels: ["Undefined", "Vague", "Partial", "Mostly clear", "Crystal clear"],
-        scaleEmojis: ["😶", "🤔", "🙂", "😊", "🎯"],
     },
     {
         key: "value_prop_clarity",
@@ -155,7 +154,6 @@ const questions = [
         subtitle: "Can you explain what you do and why it matters in one sentence?",
         type: "scale",
         scaleLabels: ["Unclear", "Rough idea", "Getting there", "Clear", "Razor sharp"],
-        scaleEmojis: ["😶", "🤔", "🙂", "😊", "💎"],
     },
     {
         key: "has_visual_identity",
@@ -169,7 +167,6 @@ const questions = [
         subtitle: "Does your landing page, social bio, and pitch deck tell the same story?",
         type: "scale",
         scaleLabels: ["Inconsistent", "Mixed", "Okay", "Aligned", "Unified"],
-        scaleEmojis: ["🔀", "😐", "🙂", "✅", "🔗"],
     },
     {
         key: "differentiation_known",
@@ -177,7 +174,6 @@ const questions = [
         subtitle: "If a customer asked 'why not the competitor?', would you have a sharp answer?",
         type: "scale",
         scaleLabels: ["No clue", "Some idea", "Decent", "Strong", "Obvious"],
-        scaleEmojis: ["❓", "🤔", "🙂", "💪", "⭐"],
     },
 ];
 
@@ -305,7 +301,7 @@ function renderQuestion() {
         }
 
         const opts = isScale
-            ? q.scaleLabels.map((label, i) => ({ value: `${i + 1}`, emoji: q.scaleEmojis[i], label }))
+            ? q.scaleLabels.map((label, i) => ({ value: `${i + 1}`, label }))
             : q.options.map(opt => ({ value: opt }));
 
         opts.forEach((opt, i) => {
@@ -314,7 +310,7 @@ function renderQuestion() {
             btn.type = "button";
 
             if (isScale) {
-                btn.innerHTML = `<span class="scale-emoji">${opt.emoji}</span><span class="scale-label">${escapeHtml(opt.label)}</span>`;
+                btn.innerHTML = `<span class="scale-label">${escapeHtml(opt.label)}</span>`;
             } else {
                 btn.textContent = opt.value;
             }
@@ -387,9 +383,9 @@ function renderResults(analysis) {
                         <h3>${escapeHtml(exp.name || "Unknown experiment")}</h3>
                         <p>${escapeHtml(exp.why_score || exp.description || "No description available.")}</p>
                         <div class="experiment-badges">
-                            ${exp.cost !== undefined ? `<span class="badge">💰 $${escapeHtml(exp.cost)}</span>` : ''}
-                            ${exp.time_days !== undefined ? `<span class="badge">⏱ ${escapeHtml(exp.time_days)}d</span>` : ''}
-                            ${exp.team_size !== undefined ? `<span class="badge">👤 ${escapeHtml(exp.team_size)}</span>` : ''}
+                            ${exp.cost !== undefined ? `<span class="badge">Cost: $${escapeHtml(exp.cost)}</span>` : ''}
+                            ${exp.time_days !== undefined ? `<span class="badge">Time: ${escapeHtml(exp.time_days)}d</span>` : ''}
+                            ${exp.team_size !== undefined ? `<span class="badge">Team: ${escapeHtml(exp.team_size)}</span>` : ''}
                             <span class="badge badge-accent">${escapeHtml(exp.type || "experiment")}</span>
                         </div>
                         <div class="score-bar-container">
@@ -422,9 +418,9 @@ function renderResults(analysis) {
     }
 
     function getSeverityLabel(severity) {
-        if (severity === "high") return "⚠ High";
-        if (severity === "medium") return "⚡ Medium";
-        return "💡 Low";
+        if (severity === "high") return "High";
+        if (severity === "medium") return "Medium";
+        return "Low";
     }
 
     // Risk cards with severity
@@ -527,11 +523,11 @@ function renderResults(analysis) {
         <!-- Executive Summary -->
         <div class="result-hero card-reveal">
             <div>
-                <div class="eyebrow">Quick read</div>
+                <div class="eyebrow">• Quick read</div>
                 <h2 style="margin-top:10px;">${escapeHtml(startupName)}</h2>
                 <div style="margin:6px 0 8px;">
                     <span class="mode-badge ${isMarketingReady ? 'marketing-ready' : 'branding-first'}">
-                        ${isMarketingReady ? '🚀 Marketing-Ready' : '🎨 Branding-First'}
+                        ${isMarketingReady ? 'Marketing-Ready' : 'Branding-First'}
                     </span>
                 </div>
                 <p>${escapeHtml(aiSummary)}</p>
@@ -551,10 +547,10 @@ function renderResults(analysis) {
 
         <!-- Tab Navigation -->
         <nav class="tab-nav card-reveal">
-            <button class="tab-btn active" data-tab="tab-rankings">📊 Rankings</button>
-            <button class="tab-btn" data-tab="tab-ai">🤖 AI Review</button>
-            <button class="tab-btn" data-tab="tab-roadmap">🗺️ Roadmap</button>
-            <button class="tab-btn" data-tab="tab-profile">👤 Profile</button>
+            <button class="tab-btn active" data-tab="tab-rankings">Rankings</button>
+            <button class="tab-btn" data-tab="tab-ai">AI Review</button>
+            <button class="tab-btn" data-tab="tab-roadmap">Roadmap</button>
+            <button class="tab-btn" data-tab="tab-profile">Profile</button>
         </nav>
 
         <!-- Tab: Rankings -->
@@ -596,7 +592,7 @@ function renderResults(analysis) {
             <!-- Risks with Severity -->
             <div class="result-card card-reveal">
                 <div class="ai-section-header">
-                    <span class="ai-section-title">⚠ Identified Risks</span>
+                    <span class="ai-section-title">Identified Risks</span>
                     <span class="ai-section-count">${risks.length} found</span>
                 </div>
                 <div class="ai-risk-list">${risksHtml}</div>
@@ -605,7 +601,7 @@ function renderResults(analysis) {
             <!-- Branding Recommendations -->
             <div class="result-card card-reveal">
                 <div class="ai-section-header">
-                    <span class="ai-section-title">🎨 Branding Recommendations</span>
+                    <span class="ai-section-title">Branding Recommendations</span>
                     <span class="ai-section-count">${brandingRecs.length} items</span>
                 </div>
                 <div class="ai-rec-grid">${aiBrandingHtml}</div>
@@ -614,7 +610,7 @@ function renderResults(analysis) {
             <!-- Marketing Recommendations -->
             <div class="result-card card-reveal">
                 <div class="ai-section-header">
-                    <span class="ai-section-title">📈 Marketing Recommendations</span>
+                    <span class="ai-section-title">Marketing Recommendations</span>
                     <span class="ai-section-count">${marketingRecs.length} items</span>
                 </div>
                 <div class="ai-rec-grid">${aiMarketingHtml}</div>
@@ -643,7 +639,7 @@ function renderResults(analysis) {
 
             <div class="result-card card-reveal">
                 <h2>Run Status</h2>
-                <p><strong>Hugging Face:</strong> ${hfStatus.enabled ? "Enabled ✓" : "Disabled"}</p>
+                <p><strong>Hugging Face:</strong> ${hfStatus.enabled ? "Enabled" : "Disabled"}</p>
                 <p><strong>Fallback used:</strong> ${hfStatus.used_fallback ? "Yes" : "No"}</p>
                 ${analysis.report_path ? `<p><strong>Report:</strong> ${escapeHtml(analysis.report_path)}</p>` : ''}
             </div>
@@ -651,7 +647,7 @@ function renderResults(analysis) {
 
         <!-- First Move Callout -->
         <div class="result-card result-callout card-reveal" style="margin-top:8px;">
-            <h2>🎯 First Move</h2>
+            <h2>First Move</h2>
             <p style="font-size:0.95rem; color:var(--text);">${escapeHtml(topAction)}</p>
         </div>
 

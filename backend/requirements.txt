@@ -1,3 +1,4 @@
 numpy
 huggingface_hub
 fpdf2
+flask

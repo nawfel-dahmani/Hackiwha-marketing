@@ -1,0 +1,366 @@
+{
+  "version": "2.0",
+  "schema": {
+    "branding_strategy": {
+      "id": "string (unique identifier)",
+      "type": "branding",
+      "name": "string (display name)",
+      "description": "string (what it is, why it matters)",
+      "cost": "number (USD, 0 for free)",
+      "time_days": "number (calendar days)",
+      "team_size": "number (people needed)",
+      "validation_score": "number (1-10, how much evidence it generates)",
+      "audience_fit": "number (1-10, how well it targets your audience)",
+      "speed_to_evidence": "number (1-10, how fast you get real data)",
+      "brand_clarity_boost": "number (0-100, points added to brand score)",
+      "tags": [
+        "string (category tags for alignment matching)"
+      ],
+      "why_score": "string (one-line reason for the validation/audience/speed scores)"
+    },
+    "marketing_experiment": {
+      "id": "string (unique identifier)",
+      "type": "marketing",
+      "name": "string (display name)",
+      "description": "string (what it is, why it matters)",
+      "cost": "number (USD, 0 for free)",
+      "time_days": "number (calendar days)",
+      "team_size": "number (people needed)",
+      "validation_score": "number (1-10, how much evidence it generates)",
+      "audience_fit": "number (1-10, how well it targets your audience)",
+      "speed_to_evidence": "number (1-10, how fast you get real data)",
+      "required_brand_score": "number (0-100, minimum brand score to unlock this experiment)",
+      "brand_strategy_tags": [
+        "string (tags matching branding strategies it depends on)"
+      ],
+      "why_score": "string (one-line reason for the validation/audience/speed scores)"
+    }
+  },
+  "branding_strategies": [
+    {
+      "id": "brand_positioning_workshop",
+      "type": "branding",
+      "name": "Brand Positioning Workshop",
+      "description": "Define your unique value proposition and how you differ from competitors. Run a 2-hour workshop with your team (or yourself) to articulate: what you do, who it's for, and why it's different.",
+      "cost": 0,
+      "time_days": 2,
+      "team_size": 1,
+      "validation_score": 8,
+      "audience_fit": 7,
+      "speed_to_evidence": 9,
+      "brand_clarity_boost": 25,
+      "tags": [
+        "positioning",
+        "messaging"
+      ],
+      "why_score": "Forces you to articulate your value proposition in one sentence; clarity is the fastest form of validation."
+    },
+    {
+      "id": "customer_persona_research",
+      "type": "branding",
+      "name": "Customer Persona Deep-Dive",
+      "description": "Interview 10-15 potential users to build detailed personas. Ask about their day, pain points, and current solutions. Record and transcribe for quotes.",
+      "cost": 100,
+      "time_days": 5,
+      "team_size": 1,
+      "validation_score": 9,
+      "audience_fit": 10,
+      "speed_to_evidence": 7,
+      "brand_clarity_boost": 30,
+      "tags": [
+        "audience_definition",
+        "positioning"
+      ],
+      "why_score": "Direct conversations with real humans are the single highest-validation activity; personas make every future experiment sharper."
+    },
+    {
+      "id": "messaging_framework",
+      "type": "branding",
+      "name": "Messaging Framework Sprint",
+      "description": "Craft consistent taglines, elevator pitches, and key messages. Write 3 versions of your core message and test them on 5 people for comprehension.",
+      "cost": 0,
+      "time_days": 3,
+      "team_size": 1,
+      "validation_score": 7,
+      "audience_fit": 8,
+      "speed_to_evidence": 8,
+      "brand_clarity_boost": 20,
+      "tags": [
+        "messaging",
+        "positioning"
+      ],
+      "why_score": "If people can't repeat your pitch back to you, your ads won't work either."
+    },
+    {
+      "id": "visual_identity_audit",
+      "type": "branding",
+      "name": "Visual Identity Audit & Refresh",
+      "description": "Review your logo, colors, and typography. Create a simple one-page style guide. If you have nothing, use a free tool like Canva to make a basic logo and color palette.",
+      "cost": 50,
+      "time_days": 2,
+      "team_size": 1,
+      "validation_score": 5,
+      "audience_fit": 6,
+      "speed_to_evidence": 6,
+      "brand_clarity_boost": 15,
+      "tags": [
+        "visual_identity"
+      ],
+      "why_score": "Visual trust signals matter for conversion, but this is lower-priority validation than messaging clarity."
+    },
+    {
+      "id": "competitor_differentiation_map",
+      "type": "branding",
+      "name": "Competitor Differentiation Map",
+      "description": "Map 5-8 competitors on a 2x2 grid (e.g., price vs. convenience). Identify the empty quadrant you occupy. This becomes your positioning anchor.",
+      "cost": 0,
+      "time_days": 2,
+      "team_size": 1,
+      "validation_score": 7,
+      "audience_fit": 6,
+      "speed_to_evidence": 8,
+      "brand_clarity_boost": 20,
+      "tags": [
+        "positioning",
+        "differentiation"
+      ],
+      "why_score": "Knowing where you sit relative to others prevents you from accidentally copying an incumbent."
+    },
+    {
+      "id": "value_proposition_canvas",
+      "type": "branding",
+      "name": "Value Proposition Canvas",
+      "description": "Use the Strategyzer canvas to map customer jobs, pains, and gains against your products/services, pain relievers, and gain creators. Fill both sides in one session.",
+      "cost": 0,
+      "time_days": 1,
+      "team_size": 1,
+      "validation_score": 8,
+      "audience_fit": 8,
+      "speed_to_evidence": 9,
+      "brand_clarity_boost": 22,
+      "tags": [
+        "positioning",
+        "messaging"
+      ],
+      "why_score": "Fastest way to check if your product actually solves a real problem; one day of honest work prevents weeks of wasted marketing."
+    },
+    {
+      "id": "brand_voice_guidelines",
+      "type": "branding",
+      "name": "Brand Voice Guidelines",
+      "description": "Define tone, voice, and writing style. Write a 1-page guide: are you casual or formal? Witty or serious? Consistent voice builds trust across channels.",
+      "cost": 0,
+      "time_days": 3,
+      "team_size": 1,
+      "validation_score": 6,
+      "audience_fit": 7,
+      "speed_to_evidence": 7,
+      "brand_clarity_boost": 18,
+      "tags": [
+        "messaging",
+        "visual_identity"
+      ],
+      "why_score": "Inconsistent messaging confuses users; a voice guide makes every tweet, email, and ad sound like the same person wrote it."
+    },
+    {
+      "id": "landing_page_copy_rewrite",
+      "type": "branding",
+      "name": "Landing Page Copy Rewrite",
+      "description": "Rewrite your landing page around a single, clear value proposition. One headline, one subhead, one CTA. Remove everything else. Test comprehension on 3 strangers.",
+      "cost": 0,
+      "time_days": 2,
+      "team_size": 1,
+      "validation_score": 7,
+      "audience_fit": 8,
+      "speed_to_evidence": 8,
+      "brand_clarity_boost": 15,
+      "tags": [
+        "messaging",
+        "positioning"
+      ],
+      "why_score": "Your landing page is your most-visited brand asset; if the copy is vague, every ad dollar is wasted."
+    }
+  ],
+  "marketing_experiments": [
+    {
+      "id": "campus_interviews",
+      "type": "marketing",
+      "name": "Campus Interviews",
+      "description": "Go to campus and interview 20-30 students about the problem you solve. Ask open-ended questions, don't pitch. Record quotes that validate or invalidate your hypothesis.",
+      "cost": 50,
+      "time_days": 3,
+      "team_size": 1,
+      "validation_score": 9,
+      "audience_fit": 10,
+      "speed_to_evidence": 9,
+      "required_brand_score": 40,
+      "brand_strategy_tags": [
+        "audience_definition",
+        "positioning"
+      ],
+      "why_score": "Direct conversations with real students give the clearest signal about whether the problem is real, at almost no cost \u2014 before spending anything on ads."
+    },
+    {
+      "id": "instagram_ad_test",
+      "type": "marketing",
+      "name": "Instagram Ad Test",
+      "description": "Run a $5/day Instagram ad for 4 days targeting your audience demographic. Measure CTR and landing page conversion. Useful once initial interest is confirmed.",
+      "cost": 180,
+      "time_days": 4,
+      "team_size": 1,
+      "validation_score": 5,
+      "audience_fit": 7,
+      "speed_to_evidence": 6,
+      "required_brand_score": 60,
+      "brand_strategy_tags": [
+        "messaging",
+        "visual_identity"
+      ],
+      "why_score": "Useful once initial interest is confirmed, but on its own it only tells you people clicked \u2014 not that they actually want the product."
+    },
+    {
+      "id": "landing_page_ab_test",
+      "type": "marketing",
+      "name": "Landing Page A/B Test",
+      "description": "Build two versions of your landing page with different headlines or CTAs. Split traffic 50/50 and measure which converts better. Requires a clear value proposition first.",
+      "cost": 100,
+      "time_days": 5,
+      "team_size": 2,
+      "validation_score": 7,
+      "audience_fit": 8,
+      "speed_to_evidence": 5,
+      "required_brand_score": 50,
+      "brand_strategy_tags": [
+        "messaging",
+        "positioning"
+      ],
+      "why_score": "Optimizes conversion but requires a strong baseline message; testing weak copy just tells you which version of 'unclear' is slightly less bad."
+    },
+    {
+      "id": "referral_program",
+      "type": "marketing",
+      "name": "Referral Program",
+      "description": "Incentivize early users to refer friends with a simple reward (e.g., $10 credit for both sides). Track referral rate and cost per acquisition.",
+      "cost": 80,
+      "time_days": 7,
+      "team_size": 1,
+      "validation_score": 6,
+      "audience_fit": 6,
+      "speed_to_evidence": 4,
+      "required_brand_score": 55,
+      "brand_strategy_tags": [
+        "messaging",
+        "positioning"
+      ],
+      "why_score": "Only works if people already love your product; a referral program for a product nobody wants is just giving away money."
+    },
+    {
+      "id": "cold_outreach",
+      "type": "marketing",
+      "name": "Targeted Cold Outreach",
+      "description": "Send 50 highly personalized emails or DMs to prospects who match your persona. Reference something specific about them. Track reply rate and meeting booking rate.",
+      "cost": 0,
+      "time_days": 5,
+      "team_size": 1,
+      "validation_score": 7,
+      "audience_fit": 8,
+      "speed_to_evidence": 7,
+      "required_brand_score": 30,
+      "brand_strategy_tags": [
+        "audience_definition",
+        "messaging"
+      ],
+      "why_score": "Zero cost, high signal \u2014 if you can't get 5 replies out of 50 personalized messages, your value proposition isn't compelling enough yet."
+    },
+    {
+      "id": "content_marketing_sprint",
+      "type": "marketing",
+      "name": "Content Marketing Sprint",
+      "description": "Write 3-5 blog posts, Twitter threads, or LinkedIn posts that solve problems for your audience. Don't sell \u2014 teach. Track engagement and inbound inquiries.",
+      "cost": 0,
+      "time_days": 7,
+      "team_size": 1,
+      "validation_score": 6,
+      "audience_fit": 7,
+      "speed_to_evidence": 5,
+      "required_brand_score": 50,
+      "brand_strategy_tags": [
+        "messaging",
+        "positioning"
+      ],
+      "why_score": "Builds long-term trust and SEO, but takes 2-4 weeks to see meaningful data; not for founders who need answers in 3 days."
+    },
+    {
+      "id": "reddit_forum_engagement",
+      "type": "marketing",
+      "name": "Reddit/Forum Engagement",
+      "description": "Answer questions in relevant subreddits or forums for 3 days. Be genuinely helpful, mention your solution only when it directly answers the question. Track upvotes and DMs.",
+      "cost": 0,
+      "time_days": 3,
+      "team_size": 1,
+      "validation_score": 7,
+      "audience_fit": 9,
+      "speed_to_evidence": 8,
+      "required_brand_score": 35,
+      "brand_strategy_tags": [
+        "audience_definition",
+        "messaging"
+      ],
+      "why_score": "Reddit communities are brutally honest \u2014 if your solution is genuinely useful, you'll know fast. If it's not, you'll know even faster."
+    },
+    {
+      "id": "beta_waitlist",
+      "type": "marketing",
+      "name": "Beta Waitlist Campaign",
+      "description": "Build a simple waitlist landing page and promote it across your channels. Measure sign-up rate and email open rate. Gauge real demand before building anything.",
+      "cost": 0,
+      "time_days": 4,
+      "team_size": 1,
+      "validation_score": 8,
+      "audience_fit": 8,
+      "speed_to_evidence": 7,
+      "required_brand_score": 45,
+      "brand_strategy_tags": [
+        "positioning",
+        "messaging"
+      ],
+      "why_score": "A waitlist with 0 sign-ups is devastating but honest \u2014 it tells you people don't care before you spend months building."
+    },
+    {
+      "id": "influencer_micro_partnership",
+      "type": "marketing",
+      "name": "Influencer Micro-Partnership",
+      "description": "Partner with a micro-influencer (1K-10K followers) in your niche for a sponsored post or story. Track clicks, sign-ups, and cost per acquisition.",
+      "cost": 150,
+      "time_days": 7,
+      "team_size": 1,
+      "validation_score": 6,
+      "audience_fit": 8,
+      "speed_to_evidence": 5,
+      "required_brand_score": 60,
+      "brand_strategy_tags": [
+        "visual_identity",
+        "messaging"
+      ],
+      "why_score": "Micro-influencers have high trust but small reach; only worth it if your visual identity and messaging are polished enough to convert their audience."
+    },
+    {
+      "id": "ambassador_program",
+      "type": "marketing",
+      "name": "Ambassador Program",
+      "description": "Recruit 5-10 passionate early users as brand ambassadors. Give them early access, swag, or equity. Track their referrals and social mentions.",
+      "cost": 200,
+      "time_days": 14,
+      "team_size": 1,
+      "validation_score": 5,
+      "audience_fit": 7,
+      "speed_to_evidence": 3,
+      "required_brand_score": 65,
+      "brand_strategy_tags": [
+        "positioning",
+        "messaging"
+      ],
+      "why_score": "Highest brand score requirement because ambassadors need a clear, compelling story to tell. If your positioning is fuzzy, they won't know what to say."
+    }
+  ]
+}

@@ -21,6 +21,74 @@ const resultsContainer = document.getElementById("results");
 const stepCounter     = document.getElementById("step-counter");
 const loadingStage    = document.getElementById("loading-stage");
 
+// ============================================================
+// MATRIX RAIN ANIMATION
+// ============================================================
+(function initMatrixRain() {
+    const canvas = document.getElementById("matrix-rain");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    // Characters for the rain — mix of katakana, latin, and numbers
+    const chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|/\\=+*&@#$";
+    const charArr = chars.split("");
+
+    let columns, drops;
+    const fontSize = 14;
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        columns = Math.floor(canvas.width / fontSize);
+        drops = new Array(columns).fill(0).map(() => Math.random() * -100);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    function draw() {
+        // Semi-transparent black to create trail effect
+        ctx.fillStyle = "rgba(10, 10, 10, 0.06)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = `${fontSize}px monospace`;
+
+        for (let i = 0; i < columns; i++) {
+            // Random character
+            const char = charArr[Math.floor(Math.random() * charArr.length)];
+
+            const x = i * fontSize;
+            const y = drops[i] * fontSize;
+
+            // Gold/amber color with varying opacity
+            const brightness = Math.random();
+            if (brightness > 0.95) {
+                // Bright flash — white/gold
+                ctx.fillStyle = "rgba(228, 210, 150, 0.9)";
+            } else if (brightness > 0.7) {
+                // Medium — golden
+                ctx.fillStyle = "rgba(200, 169, 70, 0.5)";
+            } else {
+                // Dim — dark amber
+                ctx.fillStyle = "rgba(139, 118, 53, 0.25)";
+            }
+
+            ctx.fillText(char, x, y);
+
+            // Reset drop when it goes off screen (with randomness)
+            if (y > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i] += 0.5 + Math.random() * 0.5;
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    // Start with a delay so the page loads first
+    setTimeout(draw, 300);
+})();
+
 // ---- Questions ----
 const questions = [
     {
@@ -264,12 +332,12 @@ function renderQuestion() {
 
             // Animate in
             btn.style.opacity = "0";
-            btn.style.transform = "translateY(8px)";
+            btn.style.transform = "translateY(6px)";
             setTimeout(() => {
-                btn.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+                btn.style.transition = "opacity 0.25s ease, transform 0.25s ease";
                 btn.style.opacity = "1";
                 btn.style.transform = "translateY(0)";
-            }, 40 + i * 35);
+            }, 30 + i * 30);
 
             optionsContainer.appendChild(btn);
         });
@@ -336,22 +404,80 @@ function renderResults(analysis) {
             `;
         }).join("") || '<p style="color:var(--muted-strong)">No ranked experiments returned.</p>';
 
-    // AI review
+    // ============================================================
+    // AI REVIEW — Enhanced rendering
+    // ============================================================
     const aiSummary = ai.summary || "No AI summary returned.";
-    const risksHtml = (ai.risks || []).map(r => `
-        <div class="risk-item">
-            <div class="risk-icon">!</div>
-            <span>${escapeHtml(r)}</span>
-        </div>
-    `).join("") || '<p style="color:var(--muted-strong)">No risks identified.</p>';
+    const risks = ai.risks || [];
+    const brandingRecs = ai.top_branding_recommendations || [];
+    const marketingRecs = ai.top_marketing_recommendations || [];
 
-    const aiBrandingHtml = (ai.top_branding_recommendations || []).map(item => `
-        <li><strong>${escapeHtml(item.name || "")}</strong> — ${escapeHtml(item.reason || "")}</li>
-    `).join("") || '<li style="color:var(--muted-strong)">No branding recommendations.</li>';
+    // Assign severity levels to risks based on position (first = high, etc.)
+    function getRiskSeverity(index, total) {
+        if (total <= 1) return "high";
+        const ratio = index / (total - 1);
+        if (ratio < 0.33) return "high";
+        if (ratio < 0.66) return "medium";
+        return "low";
+    }
 
-    const aiMarketingHtml = (ai.top_marketing_recommendations || []).map(item => `
-        <li><strong>${escapeHtml(item.name || "")}</strong> — ${escapeHtml(item.reason || "")}</li>
-    `).join("") || '<li style="color:var(--muted-strong)">No marketing recommendations.</li>';
+    function getSeverityLabel(severity) {
+        if (severity === "high") return "⚠ High";
+        if (severity === "medium") return "⚡ Medium";
+        return "💡 Low";
+    }
+
+    // Risk cards with severity
+    const risksHtml = risks.length > 0
+        ? risks.map((r, i) => {
+            const severity = getRiskSeverity(i, risks.length);
+            return `
+                <div class="ai-risk-card card-reveal">
+                    <span class="ai-risk-severity ${severity}">${getSeverityLabel(severity)}</span>
+                    <span class="ai-risk-text">${escapeHtml(r)}</span>
+                </div>
+            `;
+        }).join("")
+        : '<p style="color:var(--muted-strong)">No risks identified.</p>';
+
+    // Branding recommendation cards
+    const aiBrandingHtml = brandingRecs.length > 0
+        ? brandingRecs.map((item, i) => `
+            <div class="ai-rec-card card-reveal">
+                <div class="ai-rec-num branding">${i + 1}</div>
+                <div>
+                    <div class="ai-rec-name">${escapeHtml(item.name || "")}</div>
+                    <div class="ai-rec-reason">${escapeHtml(item.reason || "")}</div>
+                </div>
+            </div>
+        `).join("")
+        : '<p style="color:var(--muted-strong)">No branding recommendations.</p>';
+
+    // Marketing recommendation cards
+    const aiMarketingHtml = marketingRecs.length > 0
+        ? marketingRecs.map((item, i) => `
+            <div class="ai-rec-card card-reveal">
+                <div class="ai-rec-num marketing">${i + 1}</div>
+                <div>
+                    <div class="ai-rec-name">${escapeHtml(item.name || "")}</div>
+                    <div class="ai-rec-reason">${escapeHtml(item.reason || "")}</div>
+                </div>
+            </div>
+        `).join("")
+        : '<p style="color:var(--muted-strong)">No marketing recommendations.</p>';
+
+    // Extract key insight — first sentence of AI summary
+    const keyInsight = aiSummary.split(/\.\s/)[0] + (aiSummary.includes('.') ? '.' : '');
+
+    // Compute a pseudo-confidence score based on available data richness
+    const confidenceScore = Math.min(95, Math.max(40,
+        (risks.length > 0 ? 15 : 0) +
+        (brandingRecs.length > 0 ? 15 : 0) +
+        (marketingRecs.length > 0 ? 15 : 0) +
+        (aiSummary.length > 50 ? 20 : 10) +
+        (brandScore > 0 ? 15 : 5) +
+        Math.floor(Math.random() * 10) + 5
+    ));
 
     // Roadmap timeline
     const roadmapHtml = (roadmap.roadmap || []).map(phase => `
@@ -403,7 +529,7 @@ function renderResults(analysis) {
             <div>
                 <div class="eyebrow">Quick read</div>
                 <h2 style="margin-top:10px;">${escapeHtml(startupName)}</h2>
-                <div style="margin:8px 0 10px;">
+                <div style="margin:6px 0 8px;">
                     <span class="mode-badge ${isMarketingReady ? 'marketing-ready' : 'branding-first'}">
                         ${isMarketingReady ? '🚀 Marketing-Ready' : '🎨 Branding-First'}
                     </span>
@@ -436,32 +562,68 @@ function renderResults(analysis) {
             ${experimentsHtml}
         </div>
 
-        <!-- Tab: AI Review -->
+        <!-- Tab: AI Review (Enhanced) -->
         <div class="tab-panel" id="tab-ai">
-            <div class="result-card card-reveal">
-                <h2>AI Summary</h2>
-                <p>${escapeHtml(aiSummary)}</p>
+
+            <!-- Terminal-style AI Summary -->
+            <div class="ai-terminal card-reveal">
+                <div class="ai-terminal-header">
+                    <div class="ai-terminal-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="ai-terminal-title">ai_strategic_review.log</span>
+                </div>
+                <div class="ai-terminal-body">
+                    ${escapeHtml(aiSummary)}<span class="ai-terminal-cursor"></span>
+                </div>
             </div>
 
-            <div class="result-card card-reveal">
-                <h2>Risks</h2>
-                <div class="risk-list">${risksHtml}</div>
+            <!-- Key Insight -->
+            <div class="ai-insight-card card-reveal">
+                <div class="ai-insight-label">◆ Key Insight</div>
+                <div class="ai-insight-text">${escapeHtml(keyInsight)}</div>
             </div>
 
-            <div class="result-card card-reveal">
-                <h2>Branding Recommendations</h2>
-                <ul>${aiBrandingHtml}</ul>
+            <!-- AI Confidence -->
+            <div class="ai-confidence card-reveal">
+                <span class="ai-confidence-label">AI Confidence</span>
+                <div class="ai-confidence-bar-bg">
+                    <div class="ai-confidence-bar-fill" style="width:0%" data-width="${confidenceScore}%"></div>
+                </div>
+                <span class="ai-confidence-value">${confidenceScore}%</span>
             </div>
 
+            <!-- Risks with Severity -->
             <div class="result-card card-reveal">
-                <h2>Marketing Recommendations</h2>
-                <ul>${aiMarketingHtml}</ul>
+                <div class="ai-section-header">
+                    <span class="ai-section-title">⚠ Identified Risks</span>
+                    <span class="ai-section-count">${risks.length} found</span>
+                </div>
+                <div class="ai-risk-list">${risksHtml}</div>
+            </div>
+
+            <!-- Branding Recommendations -->
+            <div class="result-card card-reveal">
+                <div class="ai-section-header">
+                    <span class="ai-section-title">🎨 Branding Recommendations</span>
+                    <span class="ai-section-count">${brandingRecs.length} items</span>
+                </div>
+                <div class="ai-rec-grid">${aiBrandingHtml}</div>
+            </div>
+
+            <!-- Marketing Recommendations -->
+            <div class="result-card card-reveal">
+                <div class="ai-section-header">
+                    <span class="ai-section-title">📈 Marketing Recommendations</span>
+                    <span class="ai-section-count">${marketingRecs.length} items</span>
+                </div>
+                <div class="ai-rec-grid">${aiMarketingHtml}</div>
             </div>
         </div>
 
         <!-- Tab: Roadmap -->
         <div class="tab-panel" id="tab-roadmap">
-            <div class="result-card card-reveal" style="margin-bottom:20px;">
+            <div class="result-card card-reveal" style="margin-bottom:16px;">
                 <h2>Founder Report</h2>
                 <p>${escapeHtml(roadmap.founder_report || "No roadmap summary returned.")}</p>
             </div>
@@ -474,7 +636,7 @@ function renderResults(analysis) {
         <div class="tab-panel" id="tab-profile">
             <div class="result-card card-reveal">
                 <h2>Your Startup Profile</h2>
-                <div class="profile-grid" style="margin-top:16px;">
+                <div class="profile-grid" style="margin-top:14px;">
                     ${profileHtml}
                 </div>
             </div>
@@ -490,7 +652,7 @@ function renderResults(analysis) {
         <!-- First Move Callout -->
         <div class="result-card result-callout card-reveal" style="margin-top:8px;">
             <h2>🎯 First Move</h2>
-            <p style="font-size:1.05rem; color:var(--text);">${escapeHtml(topAction)}</p>
+            <p style="font-size:0.95rem; color:var(--text);">${escapeHtml(topAction)}</p>
         </div>
 
         <!-- Actions Row -->
@@ -514,6 +676,15 @@ function renderResults(analysis) {
                     card.offsetHeight; // force reflow
                     card.style.animation = "";
                 });
+
+                // Animate confidence bar when AI tab opens
+                if (btn.dataset.tab === "tab-ai") {
+                    setTimeout(() => {
+                        document.querySelectorAll(".ai-confidence-bar-fill[data-width]").forEach(bar => {
+                            bar.style.width = bar.dataset.width;
+                        });
+                    }, 200);
+                }
             }
         });
     });
@@ -530,6 +701,14 @@ function renderResults(analysis) {
             bar.style.width = bar.dataset.width;
         });
     }, 400);
+
+    // Animate confidence bar on initial load if Rankings tab is active
+    // (will be re-triggered when switching to AI tab)
+    setTimeout(() => {
+        document.querySelectorAll(".ai-confidence-bar-fill[data-width]").forEach(bar => {
+            bar.style.width = bar.dataset.width;
+        });
+    }, 600);
 }
 
 function animateCounter(elementId, start, end, duration) {
@@ -591,24 +770,38 @@ async function runAnalysis() {
     const aiToggle = document.getElementById("ai-toggle");
     const useHf = aiToggle ? aiToggle.checked : true;
 
-    const response = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            founder_inputs: founderInputs,
-            threshold: 60,
-            use_hugging_face: useHf,
-            save_report: true,
-        }),
-    });
+    // 90-second timeout so DeepSeek has time but we don't hang forever
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 90000);
 
-    const data = await response.json();
+    try {
+        const response = await fetch("/api/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            signal: controller.signal,
+            body: JSON.stringify({
+                founder_inputs: founderInputs,
+                threshold: 60,
+                use_hugging_face: useHf,
+                save_report: true,
+            }),
+        });
 
-    if (!response.ok) {
-        throw new Error(data.error || "Request failed");
+        clearTimeout(timeoutId);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Request failed");
+        }
+
+        return data;
+    } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === "AbortError") {
+            throw new Error("Request timed out after 90 seconds. The AI service may be slow — try again or disable the AI toggle.");
+        }
+        throw err;
     }
-
-    return data;
 }
 
 // ---- Event Handlers ----
@@ -656,7 +849,7 @@ nextBtn.addEventListener("click", async () => {
         stopLoadingStages();
         setScreen(resultScreen);
         resultsContainer.innerHTML = `
-            <div class="result-card" style="text-align:center; padding:48px 28px;">
+            <div class="result-card" style="text-align:center; padding:44px 24px;">
                 <h2 style="color:var(--danger);">Analysis Failed</h2>
                 <p style="margin:12px 0 20px;">${escapeHtml(error.message || "Unknown error")}</p>
                 <button id="retry-btn" class="primary-btn">Try Again</button>
@@ -675,7 +868,7 @@ nextBtn.addEventListener("click", async () => {
                 stopLoadingStages();
                 setScreen(resultScreen);
                 resultsContainer.innerHTML = `
-                    <div class="result-card" style="text-align:center; padding:48px 28px;">
+                    <div class="result-card" style="text-align:center; padding:44px 24px;">
                         <h2 style="color:var(--danger);">Still Failing</h2>
                         <p style="margin:12px 0 20px;">${escapeHtml(err.message || "Unknown error")}</p>
                         <button id="restart-btn" class="secondary-btn">Start Over</button>

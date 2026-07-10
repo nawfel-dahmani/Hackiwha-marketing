@@ -1,18 +1,32 @@
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <title>LearnFirst</title>
 </head>
 <body>
 
 <section id="welcome-screen">
 
+    <div class="ambient ambient-left"></div>
+    <div class="ambient ambient-right"></div>
+
     <div class="container">
 
-        <h1>LaunchPilot</h1>
+        <div class="eyebrow">Deterministic marketing validation</div>
+
+        <h1>LearnFirst</h1>
 
         <p>
-            Get a personalized branding and marketing roadmap
-            for your startup in less than one minute.
+            Turn a startup profile into a ranked experiment plan, an AI strategic review,
+            and a founder-ready roadmap.
         </p>
+
+        <div class="hero-pills">
+            <span>SAW ranking</span>
+            <span>AI review layer</span>
+            <span>Founder roadmap</span>
+        </div>
 
         <button id="start-btn">
             Start Assessment
@@ -26,15 +40,22 @@
 
     <div class="question-card">
 
+        <div class="card-header">
+            <div>
+                <div class="eyebrow">Startup profile</div>
+                <h2 id="question-title">
+                    What industry is your startup in?
+                </h2>
+            </div>
+
+            <div class="step-counter" id="step-counter">1 / 12</div>
+        </div>
+
         <div id="progress">
 
     <div id="progress-fill"></div>
 
 </div>
-
-        <h2 id="question-title">
-            What industry is your startup in?
-        </h2>
 
         <div id="options-container">
 
@@ -57,26 +78,24 @@
 
     <div class="loading-card">
 
-<h2>
+<div class="spinner"></div>
 
-Analyzing your startup...
+<h2>Analyzing your startup...</h2>
 
-</h2>
-
-<p>
-
-Generating your roadmap...
-
-</p>
+<p>Ranking experiments and preparing the founder report...</p>
 
 </div>
 </section>
 
 <section id="result-screen">
 
-    <div class="container">
+    <div class="container result-container">
 
-        <h1>Your Startup Report</h1>
+        <h1>Your LearnFirst Report</h1>
+
+        <p class="result-intro">
+            The deterministic engine ranks the experiments first, then the AI explains the outcome and turns it into an execution plan.
+        </p>
 
         <div id="results">
 

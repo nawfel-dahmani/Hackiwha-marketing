@@ -2,9 +2,29 @@ import copy
 import json
 import os
 
+def load_dotenv():
+    possible_paths = [
+        os.path.join(os.path.dirname(__file__), ".env"),
+        os.path.join(os.path.dirname(__file__), "..", ".env"),
+        ".env"
+    ]
+    for path in possible_paths:
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#") and "=" in line:
+                            k, v = line.split("=", 1)
+                            os.environ[k.strip()] = v.strip().strip("'\"")
+            except Exception:
+                pass
+
+load_dotenv()
 
 DEFAULT_MODEL = os.getenv("HF_MODEL", "Qwen/Qwen2.5-72B-Instruct")
 DEFAULT_PROVIDER = os.getenv("HF_PROVIDER", "auto")
+
 
 
 AI_RECOMMENDATION_SCHEMA = {
@@ -240,7 +260,9 @@ def call_deepseek_agent(system_prompt, payload, schema, schema_name):
         "max_tokens": 1000
     }
 
-    response = requests.post(url, headers=headers, json=data, timeout=30)
+    print(f"[DeepSeek] Calling {url} with model={data['model']}...")
+    response = requests.post(url, headers=headers, json=data, timeout=60)
+    print(f"[DeepSeek] Response status: {response.status_code}")
     response.raise_for_status()
 
     content = response.json()["choices"][0]["message"]["content"]
@@ -346,10 +368,7 @@ def fallback_ai_recommendation(algorithm_output):
     return {
         "mode": mode,
         "brand_score": output.get("brand_score", 0),
-        "summary": (
-            "Local fallback recommendation based on the deterministic engine. "
-            "Set HF_TOKEN to enable the Hugging Face second-opinion agent."
-        ),
+        "summary": "",
         "top_branding_recommendations": branding,
         "top_marketing_recommendations": marketing,
         "risks": [

@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="LearnFirst ranks startup marketing experiments with a deterministic engine and AI explanation layer. Built for hackathons, founder tools, and fast marketing validation.">
-    <meta name="theme-color" content="#06090f">
+    <meta name="theme-color" content="#0a0a0a">
     <link rel="stylesheet" href="style.css">
     <title>LearnFirst | Smart Marketing Experiment Ranking</title>
 </head>
 <body>
 
+<!-- Matrix rain canvas -->
+<canvas id="matrix-rain"></canvas>
+
 <!-- SVG gradient definition for score ring -->
 <svg width="0" height="0" style="position:absolute">
     <defs>
         <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#8b5cf6"/>
-            <stop offset="100%" stop-color="#06b6d4"/>
+            <stop offset="0%" stop-color="#c8a946"/>
+            <stop offset="100%" stop-color="#8b7635"/>
         </linearGradient>
     </defs>
 </svg>
@@ -31,7 +34,7 @@
     <div class="container hero-shell">
 
         <div class="hero-copy">
-            <div class="eyebrow">⚡ Built for startup validation</div>
+            <div class="eyebrow">• Built for startup validation</div>
 
             <h1>LearnFirst</h1>
 
@@ -96,7 +99,7 @@
 
         <div class="card-header">
             <div>
-                <div class="eyebrow">Startup profile</div>
+                <div class="eyebrow">• Startup profile</div>
                 <h2 id="question-title">
                     What's your startup called?
                 </h2>
@@ -148,7 +151,7 @@
     <div class="container result-container">
 
         <div class="result-header">
-            <div class="eyebrow">📊 Judge-ready output</div>
+            <div class="eyebrow">• Judge-ready output</div>
             <h1>Your LearnFirst Report</h1>
             <p class="result-intro">
                 The deterministic engine ranked the experiments, then AI explained the outcome and built an execution plan.

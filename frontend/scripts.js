@@ -403,7 +403,7 @@ function renderResults(analysis) {
     // ============================================================
     // AI REVIEW — Enhanced rendering
     // ============================================================
-    const aiSummary = ai.summary || "No AI summary returned.";
+    const aiSummary = typeof ai.summary === "string" ? ai.summary.trim() : "";
     const risks = ai.risks || [];
     const brandingRecs = ai.top_branding_recommendations || [];
     const marketingRecs = ai.top_marketing_recommendations || [];
@@ -462,15 +462,33 @@ function renderResults(analysis) {
         `).join("")
         : '<p style="color:var(--muted-strong)">No marketing recommendations.</p>';
 
-    // Extract key insight — first sentence of AI summary
-    const keyInsight = aiSummary.split(/\.\s/)[0] + (aiSummary.includes('.') ? '.' : '');
+    const aiSummaryHtml = aiSummary
+        ? `
+            <div class="ai-terminal card-reveal">
+                <div class="ai-terminal-header">
+                    <div class="ai-terminal-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="ai-terminal-title">ai_strategic_review.log</span>
+                </div>
+                <div class="ai-terminal-body">
+                    ${escapeHtml(aiSummary)}<span class="ai-terminal-cursor"></span>
+                </div>
+            </div>
+        `
+        : "";
+
+    // Extract key insight — first sentence of AI summary when available
+    const keyInsight = aiSummary
+        ? aiSummary.split(/\.\s/)[0] + (aiSummary.includes('.') ? '.' : '')
+        : "The deterministic engine ranked the experiments from your inputs.";
 
     // Compute a pseudo-confidence score based on available data richness
     const confidenceScore = Math.min(95, Math.max(40,
         (risks.length > 0 ? 15 : 0) +
         (brandingRecs.length > 0 ? 15 : 0) +
         (marketingRecs.length > 0 ? 15 : 0) +
-        (aiSummary.length > 50 ? 20 : 10) +
+        (aiSummary.length > 50 ? 20 : aiSummary.length > 0 ? 10 : 5) +
         (brandScore > 0 ? 15 : 5) +
         Math.floor(Math.random() * 10) + 5
     ));
@@ -561,18 +579,7 @@ function renderResults(analysis) {
         <!-- Tab: AI Review (Enhanced) -->
         <div class="tab-panel" id="tab-ai">
 
-            <!-- Terminal-style AI Summary -->
-            <div class="ai-terminal card-reveal">
-                <div class="ai-terminal-header">
-                    <div class="ai-terminal-dots">
-                        <span></span><span></span><span></span>
-                    </div>
-                    <span class="ai-terminal-title">ai_strategic_review.log</span>
-                </div>
-                <div class="ai-terminal-body">
-                    ${escapeHtml(aiSummary)}<span class="ai-terminal-cursor"></span>
-                </div>
-            </div>
+            ${aiSummaryHtml}
 
             <!-- Key Insight -->
             <div class="ai-insight-card card-reveal">

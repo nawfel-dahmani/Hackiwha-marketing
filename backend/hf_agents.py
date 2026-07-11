@@ -368,10 +368,7 @@ def fallback_ai_recommendation(algorithm_output):
     return {
         "mode": mode,
         "brand_score": output.get("brand_score", 0),
-        "summary": (
-            "Local fallback recommendation based on the deterministic engine. "
-            "Set HF_TOKEN to enable the Hugging Face second-opinion agent."
-        ),
+        "summary": "",
         "top_branding_recommendations": branding,
         "top_marketing_recommendations": marketing,
         "risks": [

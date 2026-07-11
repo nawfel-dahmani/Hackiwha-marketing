@@ -1,6 +1,6 @@
-# LaunchPilot (Hackiwha Marketing Validator)
+# LearnFirst (Hackiwha Marketing Validator)
 
-LaunchPilot is an interactive startup validation and marketing strategy recommendation platform. It combines a deterministic scoring algorithm with LLM-enhanced analysis to evaluate a founder's startup profile, recommend targeted branding/marketing experiments, and generate a customized strategic roadmap report (in both Markdown and PDF formats).
+LearnFirst is an interactive startup validation and marketing strategy recommendation platform. It combines a deterministic scoring algorithm with LLM-enhanced analysis to evaluate a founder's startup profile, recommend targeted branding/marketing experiments, and generate a customized strategic roadmap report (in both Markdown and PDF formats).
 
 ---
 

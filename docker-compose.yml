@@ -1,0 +1,30 @@
+﻿version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: learnfirst-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - FLASK_ENV=production
+    volumes:
+      - ./backend/reports:/app/reports
+    networks:
+      - learnfirst-net
+
+  frontend:
+    build: .
+    container_name: learnfirst-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - learnfirst-net
+
+networks:
+  learnfirst-net:
+    driver: bridge

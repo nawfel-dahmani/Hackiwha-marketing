@@ -49,7 +49,7 @@ This is the simplest way to run both the frontend and backend with production co
    Create a `.env` file in the root folder with:
    ```env
    DEEPSEEK_API_KEY=your_deepseek_api_key_here
-   HF_TOKEN=your_huggingface_token_here
+
    ```
 3. **Build and start the containers**:
    ```bash

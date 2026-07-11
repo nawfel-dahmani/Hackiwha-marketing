@@ -1,0 +1,265 @@
+/* Import fonts first (before tailwind) */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@200;300;400;500;600&family=Fira+Code:wght@300;400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   LearnFirst — Global Styles (adapted from Cyber Rain template)
+   ============================================================ */
+
+@font-face {
+  font-family: 'GeistMono';
+  src: url('/node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2') format('woff2');
+  font-weight: 100 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 34 68% 75%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 7%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 85%;
+    --accent: 34 68% 75%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 100% / 0.1;
+    --input: 0 0% 16%;
+    --ring: 34 68% 75%;
+    --radius: 0px;
+  }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'EB Garamond', serif;
+    font-weight: 400;
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(200, 170, 130, 0.25);
+    color: #ffffff;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+@layer components {
+  /* Loading text blur animation */
+  @keyframes blur-text {
+    0% {
+      filter: blur(0px);
+      opacity: 1;
+    }
+    100% {
+      filter: blur(4px);
+      opacity: 0.4;
+    }
+  }
+
+  /* Screen entrance */
+  @keyframes screen-enter {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Screen exit */
+  @keyframes screen-exit {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+  }
+
+  /* Card reveal */
+  @keyframes card-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Shimmer on buttons */
+  @keyframes shimmer {
+    0%, 100% {
+      left: -100%;
+    }
+    50% {
+      left: 100%;
+    }
+  }
+
+  /* Pulse glow */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(200, 170, 130, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(200, 170, 130, 0.2);
+    }
+  }
+
+  /* Spinner rotation */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Result card base */
+  .result-card {
+    background: rgba(255, 255, 255, 0.02);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(6px) saturate(140%);
+    -webkit-backdrop-filter: blur(6px) saturate(140%);
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.08),
+      0 8px 32px rgba(0, 0, 0, 0.15);
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.12) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.12) 80%,
+      rgba(255, 255, 255, 0.4) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.2;
+  }
+
+  .result-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+      radial-gradient(ellipse 90% 40% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 35% at 65% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  .result-card:hover {
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.12),
+      0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Feature card hover */
+  .feature-card {
+    cursor: default;
+  }
+  .feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.12),
+      0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Option button hover */
+  .option-btn {
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(200, 170, 130, 0.06), rgba(138, 154, 138, 0.04));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .option-btn:hover::before {
+    opacity: 1;
+  }
+
+  /* Liquid glass button base */
+  .liquid-glass-btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .result-card {
+      border-radius: 14px;
+    }
+  }
+}
+
+@layer utilities {
+  /* Text gradient utility */
+  .text-gradient-amber {
+    background: linear-gradient(135deg, rgba(200, 170, 130, 0.9), rgba(180, 150, 110, 0.7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
